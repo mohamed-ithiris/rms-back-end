@@ -1,8 +1,8 @@
-// server.js
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const db = require('./db');
+require('./db'); // Import the db module
+const employeeRoutes = require('./routes/employeeRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 
 // Middleware
@@ -10,6 +10,7 @@ app.use(express.json());
 
 // Routes
 app.use('/orders', orderRoutes);
+app.use('/employees', employeeRoutes);
 
 // Start server
 const PORT = process.env.PORT || 3000;
