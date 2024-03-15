@@ -7,6 +7,7 @@ const employeeRoutes = require('./routes/employeeRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
 const customerRoutes = require('./routes/customerRoutes');
 const promotionRoutes = require('./routes/promotionRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 
 // Middleware
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use('/employees', employeeRoutes);
 app.use('/inventory', inventoryRoutes);
 app.use('/customers', customerRoutes);
 app.use('/promotions', promotionRoutes);
+app.use('/feedback', feedbackRoutes);
 
 // Start server
 const PORT = process.env.PORT || 3000;
