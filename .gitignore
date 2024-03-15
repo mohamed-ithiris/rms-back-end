@@ -1,0 +1,25 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# IDE and editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+.DS_Store
+
+# Logs and runtime data
+logs/
+*.log
+npm-debug.log*
+
+# Dependency directories
+.jenkins/
+build/
+dist/
