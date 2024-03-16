@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 require('./db'); // Import the db module
+const swaggerSetup = require('./swagger');
 
 const protectedRoute = require('./routes/ProtectedRoute');
 const { authorize } = require('./middleware/authorizeMiddleware');
@@ -29,6 +30,9 @@ app.use('/promotions', promotionRoutes);
 app.use('/feedback', feedbackRoutes);
 app.use('/menuItems', menuItemRoutes);
 app.use('/auth', authRoutes);
+
+// Initialize Swagger setup
+swaggerSetup(app);
 
 // Start server
 const PORT = process.env.PORT || 3000;
