@@ -60,12 +60,12 @@ exports.login = async (req, res) => {
         res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
 
         // Storing refresh token in a database 
-        // Storing refresh token in a database (MongoDB example)
-        const validUser = await Employee.findById(employee._id);
-        validUser.refreshToken = refreshToken;
-        await validUser.save();
-        // employee.refreshToken = refreshToken;
-        // await employee.save();
+        // Update the employee document with the refresh token
+        await Employee.findByIdAndUpdate(
+            employee._id,
+            { refreshToken: refreshToken },
+            { new: true }
+        );
 
         res.status(200).json({
             accessToken: accessToken,
@@ -77,7 +77,7 @@ exports.login = async (req, res) => {
 };
 
 exports.refreshToken = async (req, res) => {
-    const refreshToken = req?.body?.refreshToken || req?.cookies?.refreshTokenß;
+    const refreshToken = req?.cookies?.refreshToken || req?.body?.refreshToken;
 
     if (!refreshToken) {
         return res.status(401).json({ message: 'No refresh token provided' });
@@ -96,3 +96,19 @@ exports.refreshToken = async (req, res) => {
         res.json({ accessToken: newAccessToken });
     });
 }
+
+exports.logout = async (req, res) => {
+    try {
+        // Clear the refresh token from the HTTP-only cookie
+        res.clearCookie('refreshToken', { httpOnly: true, secure: true });
+
+        // Optionally, clear the refresh token from the database
+        // Example: Update the employee document to remove the refresh token
+        const employeeId = req.employeeId; // Assuming you have the user's ID available in req.user
+        await Employee.findByIdAndUpdate(employeeId, { refreshToken: null });
+
+        res.status(200).json({ message: 'Logout successful' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

@@ -1,7 +1,7 @@
 // Protected Routes
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../authMiddleware');
+const authMiddleware = require('../middleware/authMiddleware');
 
 // Apply JWT middleware to protect the employees route
 // Employees Module

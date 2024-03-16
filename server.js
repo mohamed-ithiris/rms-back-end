@@ -4,6 +4,7 @@ const app = express();
 require('./db'); // Import the db module
 
 const protectedRoute = require('./routes/ProtectedRoute');
+const { authorize } = require('./middleware/authorizeMiddleware');
 
 const orderRoutes = require('./routes/orderRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
@@ -16,8 +17,8 @@ const authRoutes = require('./routes/authRoutes');
 
 // Middleware
 app.use(express.json());
-// Apply middleware to all routes starting with '/api'
 app.use('/', protectedRoute);
+app.use('/employees', authorize(['admin', 'manager', 'server', 'kitchen staff', 'delivery captain']));
 
 // Routes
 app.use('/orders', orderRoutes);
