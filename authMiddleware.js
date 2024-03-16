@@ -6,8 +6,6 @@ exports.verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 
-    console.log(token, 'token',authHeader)
-
     // Check if the token is provided
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });
