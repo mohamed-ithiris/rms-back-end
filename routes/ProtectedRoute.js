@@ -19,7 +19,7 @@ router.get('/employees', authMiddleware.verifyToken, (req, res, next) => {
 // Apply JWT middleware to protect the orders route
 router.get('/orders', authMiddleware.verifyToken, (req, res) => {
     // console.log(req, "req")
-    res.json({ message: 'Protected route accessed successfully', employeeId: req.employeeId });
+    res.json({ message: 'Protected route accessed successfully', userId: req.userId });
 });
 
 module.exports = router;

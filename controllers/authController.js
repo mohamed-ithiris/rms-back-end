@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
         const user = {
-            employeeId: employee._id,
+            userId: employee._id,
             name: employee.name,
             role: employee.role
         }
@@ -89,7 +89,7 @@ exports.refreshToken = async (req, res) => {
             return res.status(403).json({ message: 'Invalid refresh token' });
         }
         const user = {
-            employeeId: decoded._id,
+            userId: decoded._id,
             name: decoded.name,
             role: decoded.role
         }
@@ -105,8 +105,8 @@ exports.logout = async (req, res) => {
 
         // Optionally, clear the refresh token from the database
         // Example: Update the employee document to remove the refresh token
-        const employeeId = req.employeeId; // Assuming you have the user's ID available in req.user
-        await Employee.findByIdAndUpdate(employeeId, { refreshToken: null });
+        const userId = req.userId; // Assuming you have the user's ID available in req.user
+        await Employee.findByIdAndUpdate(userId, { refreshToken: null });
 
         res.status(200).json({ message: 'Logout successful' });
     } catch (error) {

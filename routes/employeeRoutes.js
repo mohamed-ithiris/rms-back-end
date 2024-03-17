@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const employeeController = require('../controllers/employeeController');
+const { body } = require('express-validator');
 
 /**
  * @swagger
@@ -171,12 +172,35 @@ const employeeController = require('../controllers/employeeController');
  *       '404':
  *         description: Employee not found with the provided ID
  */
+// Validation middleware to validate request body
+const validateCreateEmployee = [
+    // Validate name
+    body('name').notEmpty().withMessage('Name is required'),
+
+    // Validate role
+    body('role').notEmpty().withMessage('Role is required'),
+
+    // Validate shifts
+    body('shifts').isArray().withMessage('Shifts must be an array'),
+
+    // Validate contactInfo
+    body('contactInfo').isObject().withMessage('Contact info must be an object'),
+
+    // Validate email
+    body('contactInfo.email').isEmail().withMessage('Invalid email'),
+
+    // Validate phone
+    body('contactInfo.phone').isMobilePhone().withMessage('Invalid phone number'),
+
+    // Validate password
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+];
 
 // Get all employees
 router.get('/', employeeController.getAllEmployees);
 
 // Create a new employee
-router.post('/', employeeController.createEmployee);
+router.post('/',validateCreateEmployee, employeeController.createEmployee);
 
 // Get a specific employee by ID
 router.get('/:id', employeeController.getEmployeeById);

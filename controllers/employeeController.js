@@ -1,5 +1,6 @@
 const Employee = require('../models/Employee');
 const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator');
 
 // Get all employees
 exports.getAllEmployees = async (req, res) => {
@@ -13,17 +14,32 @@ exports.getAllEmployees = async (req, res) => {
 
 // Create a new employee
 exports.createEmployee = async (req, res) => {
-    // Hash the password
-    const { name, role, shifts, contactInfo, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
     try {
+        // Check for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        // Hash the password
+        const { name, role, shifts, contactInfo, password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new employee instance
         const newEmployee = new Employee({ name, role, shifts, contactInfo, password: hashedPassword });
+
+        // Save the employee to the database
         await newEmployee.save();
+
+        // Send success response
         res.status(201).json(newEmployee);
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        // Handle database or server errors
+        console.error('Error creating employee:', err);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
+
 
 // Get a specific employee by ID
 exports.getEmployeeById = async (req, res) => {
